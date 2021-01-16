@@ -3,7 +3,7 @@ from models import schooluder_model, fun_tasks_model, upload_task_model, upload_
 import datetime
 import smtplib
 
-app = Flask(__name__, static_url_path='', static_folder='static-art', template_folder='template-art')
+app = Flask(__name__, static_url_path='', static_folder='static', template_folder='template')
 
 
 username = "Shira Levi"
@@ -35,8 +35,8 @@ def error_login():
 @app.route('/schedule.html')
 def schedule():
     student_name = username
-    student_class = scholuder_model.get_class_by_student(student_name)
-    data = scholuder_model.get_week_schedule_by_class(student_class)
+    student_class = schooluder_model.get_class_by_student(student_name)
+    data = schooluder_model.get_week_schedule_by_class(student_class)
     day = datetime.datetime.today().weekday()
     hour = datetime.datetime.now().hour
     date = datetime.datetime.today().strftime('%A - %B %d:')
@@ -46,7 +46,7 @@ def schedule():
 @app.route('/fun_task.html')
 def about_fun_tasks():
     student_name = username
-    student_class = scholuder_model.get_class_by_student(student_name)
+    student_class = schooluder_model.get_class_by_student(student_name)
     fun_tasks = fun_tasks_model.get_fun_tasks_by_grade(student_class)
     print(fun_tasks)
     fun_tasks_1 = fun_tasks[0:int(len(fun_tasks)/2)]
@@ -147,7 +147,7 @@ def teacher_post_lesson():
         hour = request.form['hour']
         subject = request.form['subject']
         zoom_link = request.form['zoom_link']
-        scholuder_model.insert_lesson_to_schedule(grade, day, hour, subject, zoom_link)
+        schooluder_model.insert_lesson_to_schedule(grade, day, hour, subject, zoom_link)
         return redirect(url_for('teacher_post_lesson'))
     return render_template('teacher_schedule.html', error=error)
 
